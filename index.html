@@ -2,60 +2,89 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Resume</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Resume Builder</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Add font-awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 
 <body>
     <div class="container">
-        <div class="resume">
+        <!-- Button to Show Form -->
+        <button id="showForm" class="button">Create your Resume</button>
+
+        <!-- Form to Capture User Input -->
+        <div class="form-container" id="formContainer" style="display: none">
+            <form id="resumeForm">
+                <h2>Enter Your Details</h2>
+                <label for="name">Name:</label>
+                <input type="text" id="name" required /><br />
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" required /><br />
+
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" required /><br />
+
+                <label for="education">Education:</label>
+                <textarea id="education" required></textarea><br />
+
+                <label for="skills">Skills (separate by commas):</label>
+                <input type="text" id="skills" required /><br />
+
+                <label for="experience">Work Experience:</label>
+                <textarea id="experience" required></textarea><br />
+
+                <!-- Image Upload Section -->
+                <label for="profileImage">Add Your Image:</label>
+                <input type="file" id="profileImage" accept="image/*" /><br />
+
+                <button type="button" id="generateResume">Generate Resume</button>
+            </form>
+        </div>
+
+        <!-- Dynamically Generated Resume -->
+        <div class="resume" id="resume">
             <!-- Personal Information Section -->
             <section id="personal-info" class="section">
                 <div class="personal-info-container">
-                    <img src="/logo.png" alt="Profile Picture" class="profile-pic">
+                    <!-- Profile Picture with Default Image -->
+                    <div class="profile-pic-container">
+                        <!-- Set Default Image Path Here -->
+                        <img id="profile-pic" src="/Default1.webp" alt="Profile Picture" class="profile-pic" />
+                        <!-- Replace 'default.png' with your image path -->
+                    </div>
                     <div class="info">
-                        <h1>Malik Musadiq Ahmed</h1>
-                        <p>Email: musadiqa34@gmail.com</p>
-                        <p>Phone: +923340125672</p>
+                        <h1 id="display-name"></h1>
+                        <p>
+                            <i class="fas fa-envelope"></i> <span id="display-email"></span>
+                        </p>
+                        <p>
+                            <i class="fas fa-phone"></i> <span id="display-phone"></span>
+                        </p>
                     </div>
                 </div>
             </section>
 
             <!-- Education Section -->
-            <section id="education" class="section">
-                <h2>Education</h2>
-                <ul>
-                    <li><strong>Intermediate part II degree commerce</strong>, GOVT COLLEGE OF COMMERCE AND ECONOMICS,
-                        2023</li>
-                    <li><strong>Matriculation</strong>, BAHRIA COLLEGE, 2020</li>
-                </ul>
+            <section id="education-section" class="section">
+                <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+                <ul id="display-education"></ul>
             </section>
 
             <!-- Skills Section -->
-            <section id="skills" class="section">
-                <h2>Skills</h2>
-                <ul>
-                    <li>HTML/CSS</li>
-                    <li>JavaScript/TypeScript</li>
-                    <li>React.js</li>
-                </ul>
+            <section id="skills-section" class="section">
+                <h2><i class="fas fa-code"></i> Skills</h2>
+                <ul id="display-skills"></ul>
             </section>
 
             <!-- Work Experience Section -->
-            <section id="work-experience" class="section">
-                <h2>Work Experience</h2>
-                <ul>
-                    <li><strong>Intern, Web Development</strong> at Company ABC, 2022</li>
-                    <li><strong>Freelancer, Front-end Developer</strong>, 2021-2023</li>
-                </ul>
+            <section id="work-experience-section" class="section">
+                <h2><i class="fas fa-briefcase"></i> Work Experience</h2>
+                <ul id="display-experience"></ul>
             </section>
-
-            <!-- Button to Toggle Skills Section -->
-            <div class="button-container">
-                <button id="toggle-skills" class="button">Toggle Skills</button>
-            </div>
         </div>
     </div>
     <script src="script.js"></script>
