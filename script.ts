@@ -1,5 +1,3 @@
-// TypeScript code to add interactivity
-
 // Get the toggle button and skills section
 const toggleButton = document.getElementById(
   "toggle-skills"
