@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Get elements from the DOM
 const formContainer = document.getElementById(
   "formContainer"
@@ -110,21 +109,9 @@ generateButton.addEventListener("click", () => {
   formContainer.style.display = "none";
 });
 
-=======
-// Get the toggle button and skills section
->>>>>>> f497ff73d319201df6a42a3439062227e91876b7
-const toggleButton = document.getElementById(
-  "toggle-skills"
-) as HTMLButtonElement;
-const skillsSection = document.getElementById("skills-section") as HTMLElement;
-toggleButton.addEventListener("click", () => {
-  // Toggle the visibility of the skills section
-  if (
-    skillsSection.style.display === "none" ||
-    skillsSection.style.display === ""
-  ) {
-    skillsSection.style.display = "block";
-  } else {
-    skillsSection.style.display = "none";
-  }
+// Optional: Save changes immediately to the local storage or apply directly
+document.querySelectorAll("[contenteditable]").forEach((element) => {
+  element.addEventListener("input", () => {
+    // Logic to handle save changes or update values in real-time
+  });
 });

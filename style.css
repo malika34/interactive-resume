@@ -210,3 +210,11 @@ ul li:not(:last-child) {
         width: 90%;
     }
 }
+
+/* Add this to your existing CSS file or append at the bottom */
+
+[contenteditable="true"]:focus {
+    border: 1px dashed #1f3b5d;
+    outline: none;
+    background-color: #f7f7f7;
+}

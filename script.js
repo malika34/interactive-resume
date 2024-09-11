@@ -77,15 +77,9 @@ generateButton.addEventListener("click", function () {
     resumeContainer.style.display = "block";
     formContainer.style.display = "none";
 });
-var toggleButton = document.getElementById("toggle-skills");
-var skillsSection = document.getElementById("skills-section");
-toggleButton.addEventListener("click", function () {
-    // Toggle the visibility of the skills section
-    if (skillsSection.style.display === "none" ||
-        skillsSection.style.display === "") {
-        skillsSection.style.display = "block";
-    }
-    else {
-        skillsSection.style.display = "none";
-    }
+// Optional: Save changes immediately to the local storage or apply directly
+document.querySelectorAll("[contenteditable]").forEach(function (element) {
+    element.addEventListener("input", function () {
+        // Logic to handle save changes or update values in real-time
+    });
 });
