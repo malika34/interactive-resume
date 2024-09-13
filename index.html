@@ -6,19 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Interactive Resume Builder</title>
     <link rel="stylesheet" href="style.css" />
-    <!-- Add font-awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- HTML2PDF library for generating PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 </head>
 
 <body>
-    <div class="container">
-        <!-- Button to Show Form -->
-        <button id="showForm" class="button">Create your Resume</button>
+    <!-- Header section for title and theme selection -->
+    <header class="header">
+        <h1>Build Your Professional Resume</h1>
+        <p>Create a stunning resume with ease.</p>
 
-        <!-- Form to Capture User Input -->
+        <!-- Dropdown to choose between different themes -->
+        <div class="theme-selector">
+            <label for="theme">Choose Theme:</label>
+            <select id="theme">
+                <option value="default">Default</option>
+                <option value="dark">Dark Mode</option>
+                <option value="light">Light Mode</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Button to display the form for creating a resume -->
+        <button id="showForm" class="button primary-button">Create Your Resume</button>
+
+        <!-- Form container for capturing user input -->
         <div class="form-container" id="formContainer" style="display: none">
             <form id="resumeForm">
                 <h2>Enter Your Details</h2>
+
+                <!-- Input fields for resume details -->
                 <label for="name">Name:</label>
                 <input type="text" id="name" required /><br />
 
@@ -37,26 +56,29 @@
                 <label for="experience">Work Experience:</label>
                 <textarea id="experience" required></textarea><br />
 
-                <!-- Image Upload Section -->
+                <!-- Image upload for profile picture -->
                 <label for="profileImage">Add Your Image:</label>
                 <input type="file" id="profileImage" accept="image/*" /><br />
 
-                <button type="button" id="generateResume">Generate Resume</button>
+                <!-- Loading bar to show progress during form submission -->
+                <div class="loading-bar" id="loadingBar"></div>
+
+                <!-- Button to generate the resume -->
+                <button type="button" id="generateResume" class="button primary-button">Generate Resume</button>
             </form>
         </div>
 
-        <!-- Dynamically Generated Resume -->
+        <!-- Container for dynamically generated resume -->
         <div class="resume" id="resume">
-            <!-- Personal Information Section -->
+            <!-- Section for personal information -->
             <section id="personal-info" class="section">
                 <div class="personal-info-container">
-                    <!-- Profile Picture with Default Image -->
+                    <!-- Profile picture with default image -->
                     <div class="profile-pic-container">
-                        <!-- Set Default Image Path Here -->
                         <img id="profile-pic" src="/Default1.webp" alt="Profile Picture" class="profile-pic" />
-                        <!-- Replace 'default.png' with your image path -->
                     </div>
                     <div class="info">
+                        <!-- Editable fields for name, email, and phone number -->
                         <h1 id="display-name" contenteditable="true"></h1>
                         <p>
                             <i class="fas fa-envelope"></i> <span id="display-email" contenteditable="true"></span>
@@ -68,26 +90,43 @@
                 </div>
             </section>
 
-            <!-- Education Section -->
+            <!-- Section for education details -->
             <section id="education-section" class="section">
                 <h2><i class="fas fa-graduation-cap"></i> Education</h2>
                 <ul id="display-education" contenteditable="true"></ul>
             </section>
 
-            <!-- Skills Section -->
+            <!-- Section for skills details -->
             <section id="skills-section" class="section">
                 <h2><i class="fas fa-code"></i> Skills</h2>
                 <ul id="display-skills" contenteditable="true"></ul>
             </section>
 
-            <!-- Work Experience Section -->
+            <!-- Section for work experience details -->
             <section id="work-experience-section" class="section">
                 <h2><i class="fas fa-briefcase"></i> Work Experience</h2>
                 <ul id="display-experience" contenteditable="true"></ul>
             </section>
+
+            <!-- Section for sharing and downloading the resume -->
+            <div id="share-download-options">
+                <!-- Generated URL for sharing -->
+                <p id="generatedURL"></p>
+                <!-- Button to copy the resume link -->
+                <button id="copyLink" class="button secondary-button">Copy Link</button>
+                <!-- Button to download the resume as PDF -->
+                <button id="downloadPDF" class="button secondary-button">Download PDF</button>
+            </div>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <!-- Footer section -->
+    <footer class="footer">
+        <p>© 2024 Interactive Resume Builder. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Link to the main JavaScript file for functionality -->
+    <script src="./script.js"></script>
 </body>
 
 </html>
