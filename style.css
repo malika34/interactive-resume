@@ -392,5 +392,23 @@ body.light-mode {
     margin: 10px 0;
     transition: width 0.5s ease;
     display: none;
-    /* Initially hidden */
+}
+
+/* Error message styling */
+.error {
+    color: red;
+    font-size: 0.9em;
+    display: none;
+}
+
+/* Printing-specific styling */
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #resume {
+        page-break-inside: avoid;
+    }
 }

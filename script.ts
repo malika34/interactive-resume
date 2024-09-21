@@ -41,11 +41,14 @@ const generatedURL = document.getElementById(
 ) as HTMLParagraphElement;
 const themeSelector = document.getElementById("theme") as HTMLSelectElement;
 const loadingBar = document.getElementById("loadingBar") as HTMLDivElement;
+const errorMessages = document.getElementById(
+  "errorMessages"
+) as HTMLDivElement;
 
 // Theme Change Logic
 themeSelector.addEventListener("change", () => {
   const selectedTheme: string = themeSelector.value;
-  document.body.className = ""; // Reset any previous theme
+  document.body.className = "";
   if (selectedTheme === "dark") {
     document.body.classList.add("dark-mode");
   } else if (selectedTheme === "light") {
@@ -57,34 +60,59 @@ themeSelector.addEventListener("change", () => {
 showFormButton.addEventListener("click", () => {
   formContainer.style.display = "block";
   showFormButton.style.display = "none";
-  resumeContainer.style.display = "none"; // Hide the resume while filling form
+  resumeContainer.style.display = "none";
 });
+
+// Function to validate form inputs
+function validateForm(): boolean {
+  const name = (document.getElementById("name") as HTMLInputElement).value;
+  const email = (document.getElementById("email") as HTMLInputElement).value;
+  const phone = (document.getElementById("phone") as HTMLInputElement).value;
+  const education = (
+    document.getElementById("education") as HTMLTextAreaElement
+  ).value;
+  const skills = (document.getElementById("skills") as HTMLInputElement).value;
+  const experience = (
+    document.getElementById("experience") as HTMLTextAreaElement
+  ).value;
+
+  let errors: string[] = [];
+
+  if (!name) errors.push("Name is required.");
+  if (!email || email.indexOf("@") === -1)
+    errors.push("A valid email is required.");
+  if (!phone || isNaN(Number(phone))) errors.push("Phone must be a number.");
+  if (!education) errors.push("Education is required.");
+  if (!skills) errors.push("Skills are required.");
+  if (!experience) errors.push("Experience is required.");
+
+  errorMessages.innerHTML = errors.join("<br />");
+
+  return errors.length === 0;
+}
 
 // Add event listener to the Generate Resume button
 generateButton.addEventListener("click", () => {
-  // Show loading bar
-  loadingBar.style.display = "block";
-  loadingBar.style.width = "0%";
+  if (validateForm()) {
+    loadingBar.style.display = "block";
+    loadingBar.style.width = "0%";
 
-  // Simulate form processing
-  let width: number = 0;
-  const interval = setInterval(() => {
-    if (width >= 100) {
-      clearInterval(interval);
-      loadingBar.style.display = "none"; // Hide the loading bar after completion
-
-      // Proceed with resume generation logic
-      generateResume();
-    } else {
-      width += 10; // Increase width by 10% increments
-      loadingBar.style.width = `${width}%`;
-    }
-  }, 200);
+    let width: number = 0;
+    const interval = setInterval(() => {
+      if (width >= 100) {
+        clearInterval(interval);
+        loadingBar.style.display = "none";
+        generateResume();
+      } else {
+        width += 10;
+        loadingBar.style.width = `${width}%`;
+      }
+    }, 200);
+  }
 });
 
 // Function to handle resume generation
 function generateResume(): void {
-  // Get user input values
   const name: string = (document.getElementById("name") as HTMLInputElement)
     .value;
   const email: string = (document.getElementById("email") as HTMLInputElement)
@@ -101,12 +129,10 @@ function generateResume(): void {
     document.getElementById("experience") as HTMLTextAreaElement
   ).value;
 
-  // Display user input in the resume
   displayName.textContent = name;
   displayEmail.textContent = email;
   displayPhone.textContent = phone;
 
-  // Update Education section
   displayEducation.innerHTML = "";
   education.split("\n").forEach((item) => {
     const li = document.createElement("li");
@@ -114,7 +140,6 @@ function generateResume(): void {
     displayEducation.appendChild(li);
   });
 
-  // Update Skills section
   displaySkills.innerHTML = "";
   skills.forEach((skill) => {
     const li = document.createElement("li");
@@ -122,7 +147,6 @@ function generateResume(): void {
     displaySkills.appendChild(li);
   });
 
-  // Update Work Experience section
   displayExperience.innerHTML = "";
   experience.split("\n").forEach((item) => {
     const li = document.createElement("li");
@@ -130,20 +154,18 @@ function generateResume(): void {
     displayExperience.appendChild(li);
   });
 
-  // Handle Profile Image Upload
   if (profileImageInput.files && profileImageInput.files[0]) {
     const reader = new FileReader();
     reader.onload = function (e) {
       if (e.target) {
-        profilePic.src = e.target.result as string; // Set the uploaded image as profile picture
+        profilePic.src = e.target.result as string;
       }
     };
-    reader.readAsDataURL(profileImageInput.files[0]); // Read the file as data URL
+    reader.readAsDataURL(profileImageInput.files[0]);
   } else {
-    profilePic.src = "Default1.webp"; // Use a default image if none is uploaded
+    profilePic.src = "Default1.webp";
   }
 
-  // Create a user data object
   const userData = {
     name: name,
     email: email,
@@ -154,34 +176,27 @@ function generateResume(): void {
     profileImage: profilePic.src,
   };
 
-  // Save user data to local storage
   const uniqueUsername = name.toLowerCase().replace(/\s+/g, "-");
   localStorage.setItem(uniqueUsername, JSON.stringify(userData));
 
-  // Call the function to generate the shareable link after the resume is generated
   generateShareableLink();
 
-  // Show the resume and hide the form
   resumeContainer.style.display = "block";
   formContainer.style.display = "none";
 }
 
 // Function to generate a shareable link
 function generateShareableLink(): void {
-  const baseUrl: string = window.location.origin; // Get the base URL (e.g., https://yourdomain.vercel.app)
+  const baseUrl: string = window.location.origin;
 
-  // Get the current unique username or identifier
   const name: string = (document.getElementById("name") as HTMLInputElement)
     .value;
-  const uniqueUsername: string = name.toLowerCase().replace(/\s+/g, "-"); // Convert name to lowercase and replace spaces with hyphens
+  const uniqueUsername: string = name.toLowerCase().replace(/\s+/g, "-");
 
-  // Manually set the path to point to the Profile page
-  const profilePath: string = `/${uniqueUsername}/profile`; // This assumes your profile page follows this path
+  const profilePath: string = `/${uniqueUsername}/profile`;
 
-  // Combine base URL and path to create the shareable link
   const shareableLink: string = `${baseUrl}${profilePath}`;
 
-  // Update the inner HTML of the element with id 'generatedURL' to display the link
   const generatedURLElement = document.getElementById(
     "generatedURL"
   ) as HTMLParagraphElement;
@@ -194,14 +209,13 @@ function generateShareableLink(): void {
 document.addEventListener("DOMContentLoaded", function () {
   const path = window.location.pathname.split("/");
   if (path.length > 1 && path[1]) {
-    const username = path[1]; // Assuming the unique path is the first segment after the domain
+    const username = path[1];
 
-    // Retrieve user data from local storage or server
-    const userData = localStorage.getItem(username); // Replace with server call if needed
+    const userData = localStorage.getItem(username);
 
     if (userData) {
       const data = JSON.parse(userData);
-      populateResume(data); // Function to populate the resume with user data
+      populateResume(data);
     } else {
       console.error("No user data found for the provided URL.");
     }
@@ -224,7 +238,7 @@ function populateResume(data: any): void {
   displaySkills.innerHTML = "";
   data.skills.forEach((skill: string) => {
     const li = document.createElement("li");
-    li.textContent = skill;
+    li.textContent = skill.trim();
     displaySkills.appendChild(li);
   });
 
@@ -235,27 +249,23 @@ function populateResume(data: any): void {
     displayExperience.appendChild(li);
   });
 
-  // Set profile picture
-  if (data.profileImage) {
-    profilePic.src = data.profileImage;
-  } else {
-    profilePic.src = "Default1.webp";
-  }
-
-  // Show the resume and hide the form
-  resumeContainer.style.display = "block";
-  formContainer.style.display = "none";
+  profilePic.src = data.profileImage || "Default1.webp";
 }
 
-// Copy Link functionality
+// Add event listener for copy link button
 copyLinkButton.addEventListener("click", () => {
-  const urlToCopy: string = generatedURL.innerText.split(" ").pop() || ""; // Get the actual URL to copy
-  navigator.clipboard.writeText(urlToCopy).then(() => {
-    alert("Link copied to clipboard!"); // Alert the user that the link has been copied
-  });
+  const shareableLink = generatedURL.innerText;
+  navigator.clipboard
+    .writeText(shareableLink)
+    .then(() => {
+      alert("Link copied to clipboard!");
+    })
+    .catch((err) => {
+      console.error("Failed to copy: ", err);
+    });
 });
 
-// PDF Download functionality
+// Add event listener for download PDF button
 downloadPDFButton.addEventListener("click", () => {
   const element = document.getElementById("resume") as HTMLDivElement;
   const buttons = document.getElementById(
@@ -263,29 +273,29 @@ downloadPDFButton.addEventListener("click", () => {
   ) as HTMLDivElement;
 
   if (element && buttons) {
-    // Hide buttons temporarily while generating the PDF
     buttons.style.display = "none";
 
-    // Configure the PDF options
     const opt = {
-      margin: 1, // Margin in inches
+      margin: 0.5,
       filename: "Resume.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 }, // Higher scale for better quality
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      image: { type: "jpeg", quality: 0.95 },
+      html2canvas: { scale: 2 },
+      jsPDF: {
+        unit: "in",
+        format: "a4",
+        orientation: "portrait",
+        autoPaging: "text",
+      },
     };
 
-    // Generate PDF
     html2pdf()
       .set(opt)
       .from(element)
       .save()
       .then(() => {
-        // Show buttons again after PDF is downloaded
         buttons.style.display = "block";
       })
       .catch(() => {
-        // If there's an error, make sure buttons are shown again
         buttons.style.display = "block";
       });
   }
